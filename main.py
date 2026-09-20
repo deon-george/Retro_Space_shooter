@@ -8,7 +8,8 @@ import logging
 import os
 
 # Set working directory to script's location
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(BASE_DIR)
 print(f"Working directory set to: {os.getcwd()}")
 
 # Configure logging
@@ -70,9 +71,9 @@ for _ in range(int(WIDTH * HEIGHT / 4000)):
     pygame.draw.circle(background, WHITE, (x, y), random.randint(1, 3))
 
 # Load custom spaceship image
-SPACESHIP_IMAGE_PATH = r"C:\Users\Deon George\OneDrive\Desktop\python programs\Retro_Space_shooter\spaceship.png"
-ALIEN_IMAGE_PATH = r"C:\Users\Deon George\OneDrive\Desktop\python programs\Retro_Space_shooter\Alien_image.xcf"
-ASTEROID_IMAGE_PATH = r"C:\Users\Deon George\OneDrive\Desktop\python programs\Retro_Space_shooter\asteroid.xcf"
+SPACESHIP_IMAGE_PATH = os.path.join(BASE_DIR, "spaceship.png")
+ALIEN_IMAGE_PATH = os.path.join(BASE_DIR, "Alien_image.xcf")
+ASTEROID_IMAGE_PATH = os.path.join(BASE_DIR, "asteroid.xcf")
 try:
     spaceship_base_image = pygame.image.load(SPACESHIP_IMAGE_PATH).convert_alpha()
     player_spaceship_image = pygame.transform.scale(spaceship_base_image, (80, 60))
@@ -290,12 +291,12 @@ explosions = pygame.sprite.Group()
 pygame.mixer.quit()
 pygame.mixer.init(frequency=44100, size=-16, channels=2)
 print("Mixer initialized with frequency=44100, size=-16, channels=2")
-laser_sound = pygame.mixer.Sound(r"C:\Users\Deon George\OneDrive\Desktop\python programs\Retro_Space_shooter\laser_sound\laser1.mp3")
+laser_sound = pygame.mixer.Sound(os.path.join(BASE_DIR, "laser_sound", "laser1.mp3"))
 laser_sound.set_volume(1.0)
-explosion_sound = pygame.mixer.Sound(r"C:\Users\Deon George\OneDrive\Desktop\python programs\Retro_Space_shooter\explosion_sound\explosion1.mp3")
+explosion_sound = pygame.mixer.Sound(os.path.join(BASE_DIR, "explosion_sound", "explosion1.mp3"))
 explosion_sound.set_volume(1.0)
 # NEW: Background music setup
-BACKGROUND_MUSIC_PATH = r"C:\Users\Deon George\OneDrive\Desktop\python programs\Retro_Space_shooter\interstellar_background_music.mp3"
+BACKGROUND_MUSIC_PATH = os.path.join(BASE_DIR, "interstellar_background_music.mp3")
 try:
     pygame.mixer.music.load(BACKGROUND_MUSIC_PATH)
     pygame.mixer.music.set_volume(0.5)  # Set to 50% volume (adjust as needed)
