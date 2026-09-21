@@ -72,7 +72,7 @@ for _ in range(int(WIDTH * HEIGHT / 4000)):
 
 # Load custom spaceship image
 SPACESHIP_IMAGE_PATH = os.path.join(BASE_DIR, "spaceship.png")
-ALIEN_IMAGE_PATH = os.path.join(BASE_DIR, "Alien_image.xcf")
+ALIEN_IMAGE_PATH = os.path.join(BASE_DIR, "alienImage.xcf")
 ASTEROID_IMAGE_PATH = os.path.join(BASE_DIR, "asteroid.xcf")
 try:
     spaceship_base_image = pygame.image.load(SPACESHIP_IMAGE_PATH).convert_alpha()
@@ -88,7 +88,7 @@ except FileNotFoundError:
 try:
     alien_base_image = pygame.image.load(ALIEN_IMAGE_PATH).convert_alpha()
     alien_image = pygame.transform.scale(alien_base_image, (60, 40))
-except FileNotFoundError:
+except (FileNotFoundError, pygame.error):
     print(f"Error: Could not load {ALIEN_IMAGE_PATH}. Using fallback.")
     alien_image = pygame.Surface((30, 20), pygame.SRCALPHA)
     pygame.draw.rect(alien_image, PURPLE, (0, 0, 30, 20))
@@ -296,10 +296,12 @@ laser_sound.set_volume(1.0)
 explosion_sound = pygame.mixer.Sound(os.path.join(BASE_DIR, "explosion_sound", "explosion1.mp3"))
 explosion_sound.set_volume(1.0)
 # NEW: Background music setup
-BACKGROUND_MUSIC_PATH = os.path.join(BASE_DIR, "interstellar_background_music.mp3")
+BACKGROUND_MUSIC_PATH = os.path.join(BASE_DIR, "backgroundScore.mp3")
+background_music_loaded = False
 try:
     pygame.mixer.music.load(BACKGROUND_MUSIC_PATH)
     pygame.mixer.music.set_volume(0.5)  # Set to 50% volume (adjust as needed)
+    background_music_loaded = True
     print("Background music loaded successfully")
 except pygame.error as e:
     print(f"Error loading background music: {e}")
@@ -344,8 +346,9 @@ title_text = title_font.render("Retro Space Shooter", True, WHITE)
 clock = pygame.time.Clock()
 running = True
 
-# NEW: Start background music before the game loop
-pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+# Start background music only when the asset loaded successfully.
+if background_music_loaded:
+    pygame.mixer.music.play(-1)  # -1 means loop indefinitely
 
 while running:
     mouse_pos = pygame.mouse.get_pos()
